@@ -6,7 +6,7 @@ from courses.serializers.lesson import LessonSerializer
 
 class CourseSerializer(serializers.ModelSerializer):
     lessons_count = serializers.SerializerMethodField()
-    lessons = LessonSerializer(many=True)
+    lessons_1 = LessonSerializer(read_only=True, many=True, source='lessons')
 
     class Meta:
         model = Course
