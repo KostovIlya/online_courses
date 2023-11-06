@@ -10,7 +10,7 @@ class IsOwner(BasePermission):
 
 
 class IsNotModerator(BasePermission):
-    message = 'Вы являетесь модератором'
+    message = 'Модераторам доступ закрыт'
 
     def has_permission(self, request, view):
         if request.user.groups.filter(name='Модераторы').exists():
