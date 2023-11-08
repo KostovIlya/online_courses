@@ -41,7 +41,8 @@ class Payment(models.Model):
         CASH = 'cash', 'наличные'
         TRANSFER = 'transfer', 'перевод на счет'
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='пользователь', related_name='payments')
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='пользователь',
+                             related_name='payments', **NULLABLE)
     payment_date = models.DateField(auto_now_add=True, verbose_name='дата оплаты')
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='оплаченный курс', **NULLABLE)
@@ -49,6 +50,8 @@ class Payment(models.Model):
 
     payment_amount = models.IntegerField(verbose_name='сумма оплаты')
     payment_method = models.CharField(max_length=10, choices=PaymentMethod.choices, verbose_name='способ оплаты')
+
+    client_secret = models.CharField(max_length=100, **NULLABLE)
 
     def __str__(self):
         return f'Оплата за: {self.course.title if self.course else self.lesson.title}, пользователем - {self.user.email}'
