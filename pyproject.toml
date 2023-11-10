@@ -18,6 +18,10 @@ djangorestframework-simplejwt = "^5.3.0"
 coverage = "^7.3.2"
 drf-yasg = "^1.21.7"
 stripe = "^7.3.0"
+redis = "^5.0.1"
+celery = "^5.3.4"
+eventlet = "^0.33.3"
+django-celery-beat = "^2.5.0"
 
 
 [build-system]

@@ -38,7 +38,7 @@ class PaymentCreateAPIView(generics.CreateAPIView):
             amount=validated_data['payment_amount'],
             currency='usd',
             description=f'Оплата за: {validated_data["course"].title if validated_data["course"] else validated_data["lesson"].title}',
-            automatic_payment_methods={"enabled": True},
+            # automatic_payment_methods={"enabled": True},
         )
 
         validated_data['client_secret'] = payment_intent.id

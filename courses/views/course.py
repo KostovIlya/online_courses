@@ -1,3 +1,6 @@
+from datetime import datetime
+
+import pytz
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
 
@@ -5,6 +8,7 @@ from courses.models import Course
 from courses.pagination import CoursesLessonsPaginator
 from courses.permissions import IsNotModerator, IsOwner
 from courses.serializers.course import CourseSerializer
+from courses.tasks import send_update_course_email
 
 
 class CourseViewSet(ModelViewSet):
@@ -23,6 +27,12 @@ class CourseViewSet(ModelViewSet):
         if self.request.user.is_staff:
             return queryset
         return queryset.filter(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        update_course = serializer.save()
+        send_update_course_email.delay(update_course.id, update_course.title, update_course.updated_at)
+        update_course.updated_at = datetime.now(pytz.timezone('Europe/Moscow'))
+        update_course.save()
 
     def get_permissions(self):
         if self.action == 'create':
