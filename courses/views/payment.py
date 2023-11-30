@@ -1,7 +1,5 @@
 import stripe
 from django.conf import settings
-from django.core.mail import send_mail
-from django.http import JsonResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -9,7 +7,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from courses.models import Payment
-from courses.permissions import IsOwner
 from courses.serializers.payment import PaymentSerializer
 
 
