@@ -15,14 +15,15 @@ services:
       - .env
 
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}' ]  # -d $${POSTGRES_DB} -U $${POSTGRES_USER}
+      test: [ 'CMD-SHELL', 'pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}' ]
       interval: 10s
       timeout: 5s
       retries: 5
 
   app:
     build: .
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    tty: true
+    command: bash -c "python manage.py migrate && python manage.py csu && python manage.py runserver 0.0.0.0:8000"
     ports:
       - '8000:8000'
     depends_on:
@@ -30,6 +31,20 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+
+  celery:
+    build: .
+    tty: true
+    command: celery -A online_courses worker -l INFO
+    depends_on:
+      - app
+
+  celery-beat:
+    build: .
+    tty: true
+    command: celery -A online_courses beat -l INFO -S django
+    depends_on:
+      - app
 
 volumes:
   pg_data:

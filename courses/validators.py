@@ -10,8 +10,12 @@ class DescriptionUrlValidator:
     def __call__(self, value):
         domain_pattern = r'(?<!@)\b(\w[\w.-]+\.\w+)\b'
         youtube_url_pattern = r'(?:https?://)?(?:www\.)?youtube.com'
+        field = value.get(self.field)
 
-        all_links = re.findall(domain_pattern, value[self.field])
+        try:
+            all_links = re.findall(domain_pattern, field)
+        except TypeError:
+            all_links = None
 
         if all_links:
             for link in all_links:
