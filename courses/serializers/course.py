@@ -7,7 +7,7 @@ from courses.validators import DescriptionUrlValidator
 
 class CourseSerializer(serializers.ModelSerializer):
     lessons_count = serializers.SerializerMethodField()
-    lessons_1 = LessonSerializer(read_only=True, many=True, source='lessons')
+    lessons = LessonSerializer(read_only=True, many=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
